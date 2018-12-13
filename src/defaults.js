@@ -221,6 +221,38 @@ JSONEditor.defaults.languages.en = {
     */
   button_collapse: "Collapse",
   /**
+    * Title on Add buttons
+	*/
+  button_add: "Add",
+  /**
+    * Title on Save buttons
+	*/
+  button_save: "Save",
+  /**
+    * Title on Cancel buttons
+	*/
+  button_cancel: "Cancel",
+  /**
+    * Title on Json edit buttons
+	*/
+  button_edit: "Edit JSON",
+  /**
+    * Title on Object properties buttons
+	*/
+  button_properties: "Properties",
+  /**
+    * Text in Delete Dialog box
+	*/
+  dialog_delete: "Do you really want to delete this item?",
+  /**
+    * Text in Invalid Json Warning
+	*/
+  alert_invalid_json: "Invalid JSON!",
+  /**
+    * Placeholder in the new property field
+	*/
+  placeholder_new_property: "Neue Eigenschaft...",
+  /**
     * Title on Expand buttons
     */
   button_expand: "Expand",
