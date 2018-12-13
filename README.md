@@ -1,8 +1,8 @@
 Fork of JSON Editor
 ===========
-::: warning
-This is a Fork of the original [json-editor/json-editor](https://github.com/json-editor/json-editor) please use it instead of this. It gets regular updates and will have better Dokumentation than this Fork which is for personal use only.
-:::
+<div class="warning">
+<em>This is a Fork of the original [json-editor/json-editor](https://github.com/json-editor/json-editor) please use it instead of this. It gets regular updates and will have better Dokumentation than this Fork which is for personal use only.</em>
+</div>
 
 Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).  
 Some pull requests added from the original repo.
