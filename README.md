@@ -1,6 +1,5 @@
-JSON Editor
+Fork of JSON Editor
 ===========
-
 [![Build Status](https://travis-ci.org/json-editor/json-editor.svg?branch=master)](https://travis-ci.org/json-editor/json-editor)  
 Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).  
 Some pull requests added from the original repo.
@@ -17,13 +16,7 @@ Install
 
 Install package
 
-    npm install @json-editor/json-editor
-
-Using a CDN
-
-    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js"></script>
-
-For local usage download the [production version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js) or the [development version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.js)
+    npm install @Jonas1753/json-editor
 
 Requirements
 -----------------
