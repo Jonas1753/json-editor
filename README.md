@@ -1,7 +1,14 @@
 Fork of JSON Editor
 ===========
-<div class="warning" style="background-color:yellow;border-radius:5px;">
-<em>This is a Fork of the original [json-editor/json-editor](https://github.com/json-editor/json-editor) please use it instead of this. It gets regular updates and will have better Dokumentation than this Fork which is for personal use only.</em>
+<style>
+.warning{
+	background-color:yellow;
+	border-radius:5px;
+	color:black;
+}
+</style>
+<div class="warning" style="background-color:yellow;border-radius:5px;color:black;">
+<em>This is a Fork of the original https://github.com/json-editor/json-editor please use it instead of this. It gets regular updates and will have better Dokumentation than this Fork which is for personal use only.</em>
 </div>
 
 Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).  
