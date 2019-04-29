@@ -18,7 +18,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
     if(this.select2) {
       if(this.select2v4)
-        this.select2.val(this.input.value).trigger("change"); 
+        this.select2.val(this.input.value).trigger("change");
       else
         this.select2.select2('val',this.input.value);
     }
@@ -179,6 +179,9 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       this.input.disabled = true;
     }
 
+    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    this.setInputAttributes([]);
+
     this.input.addEventListener('change',function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -293,10 +296,10 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
 
               // Rendered value
               if(this.enumSource[i].value) {
-                item_values[j] = this.enumSource[i].value({
+                item_values[j] = this.typecast(this.enumSource[i].value({
                   i: j,
                   item: item
-                });
+                }));
               }
               // Use value directly
               else {

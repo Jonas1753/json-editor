@@ -40,6 +40,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     }
     else if(this.ace_editor) {
       this.ace_editor.setValue(sanitized);
+      this.ace_editor.session.getSelection().clearSelection();
+      this.ace_editor.resize();
     }
     
     var changed = from_template || this.getValue() !== value;
@@ -48,7 +50,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     
     if(initial) this.is_dirty = false;
     else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
-    
+
     if(this.adjust_height) this.adjust_height(this.input);
 
     // Bubble this setValue to parents if the value changed
@@ -148,6 +150,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
           'scss',
           'smarty',
           'sql',
+          'sqlserver',
           'stylus',
           'svg',
           'twig',
@@ -190,12 +193,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.input.setAttribute('readonly', 'true');
     }
 
-    if (this.schema.options && this.schema.options.inputAttributes && this.schema.options.inputAttributes.length > 0) {
-      var input = this.input;
-      this.schema.options.inputAttributes.forEach(function (inputAttribute) {
-        input.setAttribute(inputAttribute.name, inputAttribute.value);
-      });
-    }
+    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step']);
 
     this.input
       .addEventListener('change',function(e) {        
@@ -296,6 +295,13 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.refreshValue();
     }
   },
+  postBuild: function() {
+    this._super();
+    // Enable cleave.js support if library is loaded and config is available
+    if (window.Cleave && this.schema.options && typeof this.schema.options.cleave == 'object') {
+      this.cleave = new window.Cleave(this.input, this.schema.options.cleave);
+    }
+  },
   enable: function() {
     if(!this.always_disabled) {
       this.input.disabled = false;
@@ -372,7 +378,14 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
         this.input.style.display = 'none';
         this.ace_editor = window.ace.edit(this.ace_container);
         
+        var aceOptions = this.schema.options && this.schema.options.ace;
+        if (aceOptions) {
+          this.ace_editor.setOptions(aceOptions);
+        }
+
         this.ace_editor.setValue(this.getValue());
+        this.ace_editor.session.getSelection().clearSelection();
+        this.ace_editor.resize();
 
         // The theme
         if(JSONEditor.plugins.ace.theme) this.ace_editor.setTheme('ace/theme/'+JSONEditor.plugins.ace.theme);
@@ -403,13 +416,16 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.sceditor_instance.destroy();
     }
     else if(this.SimpleMDE) {
-      this.SimpleMDE.destroy();
+      this.SimpleMDE.toTextArea();
+      this.SimpleMDE = null;
     }
     else if(this.ace_editor) {
       this.ace_editor.destroy();
     }
-    
-    
+    if (this.cleave) {
+      this.cleave.destroy();
+    }
+
     this.template = null;
     if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
     if(this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label);

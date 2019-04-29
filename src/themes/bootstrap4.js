@@ -93,10 +93,11 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
 
   addInputError: function(input, text) {
     if (!input.controlgroup) return;
-    input.controlgroup.classList.add("has-error");
+    input.controlgroup.classList.add('has-danger');
+    input.classList.add('is-invalid');
     if (!input.errmsg) {
       input.errmsg = document.createElement("p");
-      input.errmsg.classList.add("form-text", "errormsg");
+      input.errmsg.classList.add("form-text", "invalid-feedback");
       input.controlgroup.appendChild(input.errmsg);
     } else {
       input.errmsg.style.display = "";
@@ -107,7 +108,8 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   removeInputError: function(input) {
     if (!input.errmsg) return;
     input.errmsg.style.display = "none";
-    input.controlgroup.classList.remove('has-error');
+    input.classList.remove('is-invalid');
+    input.controlgroup.classList.remove('has-danger');
   },
   getTabHolder: function(propertyName) {
     var el = document.createElement("div");
@@ -161,12 +163,24 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     return el;
   },
   markTabActive: function(row) {
-    row.tab.classList.add('active');
-    row.container.classList.add('active');
+    row.tab.firstChild.classList.add('active');
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.add('active');
+    }
+    else {
+      row.container.classList.add('active');
+    }
   },
   markTabInactive: function(row) {
-    row.tab.classList.remove('active');
-    row.container.classList.remove('active');
+    row.tab.firstChild.classList.remove('active');
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.remove('active');
+    }
+    else {
+      row.container.classList.remove('active');
+    }
   },
   getProgressBar: function() {
     var min = 0,
@@ -213,7 +227,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     inputGroupContainer.appendChild(input);
 
     var inputGroup = document.createElement('div');
-    inputGroup.classList.add('input-group-btn');
+    inputGroup.classList.add('input-group-prepend');
     inputGroupContainer.appendChild(inputGroup);
 
     for(var i=0;i<buttons.length;i++) {

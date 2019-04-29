@@ -213,8 +213,7 @@ JSONEditor.AbstractEditor = Class.extend({
       }
     }
   },
-  
-  
+  onMove: function() {},
   getButton: function(text, icon, title) {
     var btnClass = 'json-editor-btn-'+icon;
     if(!this.iconlib) icon = null;
@@ -546,6 +545,17 @@ JSONEditor.AbstractEditor = Class.extend({
   getValidId: function(id) {
     id = id === undefined ? "" : id.toString();
     return id.replace(/\s+/g, "-");
+  },
+  setInputAttributes: function(inputAttribute) {
+    if (this.schema.options && this.schema.options.inputAttributes) {
+      var inputAttributes = this.schema.options.inputAttributes;
+      var protectedAttributes = ['name', 'type'].concat(inputAttribute);
+      for (var key in inputAttributes) {
+        if (inputAttributes.hasOwnProperty(key) && protectedAttributes.indexOf(key.toLowerCase()) == -1) {
+          this.input.setAttribute(key, inputAttributes[key]);
+        }
+      }
+    }
   },
   getOption: function(key) {
     try {

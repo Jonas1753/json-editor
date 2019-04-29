@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     'string-replace': {
       version: {
         files: {
-          'dist/': 'dist/**',
+          'dist/': 'dist/**/*.js',
         },
         options: {
           replacements: [{
@@ -91,7 +91,9 @@ module.exports = function(grunt) {
         dest: 'dist/jsoneditor.min.js'
       },
       options: {
-        preserveComments: 'some',
+        preserveComments: function(node, comment) {
+          return /^!|@preserve|@license|@cc_on/i.test(comment.value)
+        },
         sourceMap: true
       }
     },
@@ -217,8 +219,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['run:mocha']);
 
     // Default task.
-  grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify','cssmin','string-replace:version']);
-  
+  grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify','cssmin']);
+
   grunt.registerTask('rawbuild', ['concat','uglify','cssmin']);
 
 };

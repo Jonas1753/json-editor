@@ -23,7 +23,7 @@ Some pull requests added from the original repo.
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.  
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
 
-Check out an interactive demo (demo.html): http://rawgithub.com/json-editor/json-editor/master/docs/demo.html
+Check out an interactive demo: https://json-editor.github.io/json-editor/
 
 Install
 -----------------
@@ -51,6 +51,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
 *  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing
+*  [Cleave.js](https://github.com/nosir/cleave.js) for formatting your **&lt;input/&gt;** content while you are typing
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
 
 Usage
@@ -58,18 +59,20 @@ Usage
 
 If you learn best by example, check these out:
 
-*  Basic Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/basic.html
-*  Advanced Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/advanced.html
-*  CSS Integration Example - http://rawgithub.com/json-editor/json-editor/master/docs/css_integration.html
-*  Base64 Editor Example (Muiltple Upload) - http://rawgithub.com/json-editor/json-editor/master/docs/multiple_upload_base64.html
-*  Datetime Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/datetime.html
-*  Recursive JSON Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/recursive.html
-*  Select2 Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/select2.html
-*  Selectize Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/selectize.html
-*  Signature Pad Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/signature.html
-*  Star Rating Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/starrating.html
-*  Upload Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/upload.html
-*  WYSIWYG Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/wysiwyg.html
+*  Basic Usage Example - https://json-editor.github.io/json-editor/basic.html
+*  ACE Editor Example - https://json-editor.github.io/json-editor/ace_editor.html
+*  Advanced Usage Example - https://json-editor.github.io/json-editor/advanced.html
+*  CSS Integration Example - https://json-editor.github.io/json-editor/css_integration.html
+*  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
+*  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
+*  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
+*  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
+*  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
+*  Selectize Editor Example - https://json-editor.github.io/json-editor/selectize.html
+*  Signature Pad Editor Example - https://json-editor.github.io/json-editor/signature.html
+*  Star Rating Editor Example - https://json-editor.github.io/json-editor/starrating.html
+*  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
+*  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
 
 
 The rest of this README contains detailed documentation about every aspect of JSON Editor.  For more [under-the-hood documentation](https://github.com/json-editor/json-editor/wiki), check the wiki.
@@ -412,6 +415,7 @@ The supported icon libs are:
 *  jqueryui
 *  fontawesome3
 *  fontawesome4
+*  fontawesome5
 *  materialicons
 
 By default, no icons are used. Just like the CSS theme, you can set the icon lib globally or when initializing:
@@ -625,6 +629,29 @@ Here is an example that will show a color picker in browsers that support it:
 }
 ```
 
+#### String Editors Input Attributes
+
+You can set custom attributes such as **placeholder**, **class** and **data-** on the input field using the special options keyword `inputAttributes`.
+
+Like this:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Full Name",
+      "options": {
+        "inputAttributes": {
+          "placeholder":  "your name here...",
+          "class": "myclass"
+        }
+      }
+    }
+  }
+}
+```
+
 #### Specialized String Editors
 
 In addition to the standard HTML input formats, JSON Editor can also integrate with several 3rd party specialized editors.  These libraries are not included in JSON Editor and you must load them on the page yourself.
@@ -730,6 +757,23 @@ You can override the default Ace theme by setting the `JSONEditor.plugins.ace.th
 
 ```js
 JSONEditor.plugins.ace.theme = 'twilight';
+```
+
+You can enable [Ace editor options](https://github.com/ajaxorg/ace/wiki/Configuring-Ace) individually by setting the `options.ace` in schema.
+
+```json
+{
+  "type": "string",
+  "format": "sql",
+  "options": {
+    "ace": {
+      "theme": "ace/theme/vibrant_ink",
+      "tabSize": 2,
+      "useSoftTabs": true,
+      "wrap": true
+    }
+  }
+}
 ```
 
 #### Booleans
@@ -1203,6 +1247,27 @@ By default, all instances of JSON Editor will use the `en` language.  To overrid
 
 ```js
 JSONEditor.defaults.language = "es";
+```
+
+Button Custimization
+-----------------
+
+All buttons have classnames in the format `json-editor-btntype-*`. Using these classnames you can choose if the button should have icon or label hidden. The icon is wrapped in an `I` tag, the label is wrapped in a `SPAN` tag.
+
+Examples:
+
+Hide the icon on "Object Properties" button:
+```css
+.json-editor-btntype-properties i {
+  display: none;
+}
+```
+
+Hide the text on "Object Properties" button:
+```css
+.json-editor-btntype-properties span {
+  display: none;
+}
 ```
 
 Custom Editor Interfaces

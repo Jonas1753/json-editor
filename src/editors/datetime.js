@@ -3,7 +3,7 @@
 Edtended handling of date, time and datetime-local type fields.
 
 Works with both string and integer data types. (default only support string type)
-Adds support for setting "placeholder" through options.
+
 Has optional support for using flatpickr datepicker.
 All flatpickr options is supported with a few minor differences.
 - "enableTime" and "noCalendar" are set automatically, based on the data type.
@@ -14,10 +14,6 @@ All flatpickr options is supported with a few minor differences.
 - If "mode" is set to either "multiple" or "range", only string data type is supported. Also the result from these is returned as a string not an array.
 
 ToDo:
-- Add support for "required" attribute. (Maybe this should be done on a general scale, as support for other input attributes are also missing, such as "placeholder")
-
-- Test if validation works with "required" fields. (Not sure if I have to put this into custom validator, or if it's handled elsewhere. UPDATE required attribute is currently not supported at ALL!)
-
  - Improve Handling of flatpicker "multiple" and "range" modes. (Currently the values are just added as string values, but the optimal scenario would be to save those as array if possible)
 
 */
@@ -25,9 +21,6 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
   build: function () {
     this._super();
     if(!this.input) return;
-
-    // Add required and placeholder text if available
-    if (this.options.placeholder !== undefined) this.input.setAttribute('placeholder', this.options.placeholder);
 
     if(window.flatpickr && typeof this.options.flatpickr == 'object') {
 
@@ -103,9 +96,10 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
   setValue: function(value, initial, from_template) {
     if (this.schema.type == 'string') {
       this._super(value, initial, from_template);
+      if (this.flatpickr) this.flatpickr.setDate(value);
     }
-    else if (value > 0) { 
-      var dateValue, dateObj = new Date(value * 1000),
+    else if (value > 0) {
+      var dateObj = new Date(value * 1000),
           year = dateObj.getFullYear(),
           month = this.zeroPad(dateObj.getMonth() + 1),
           day = this.zeroPad(dateObj.getDate()),
@@ -113,13 +107,14 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
           min = this.zeroPad(dateObj.getMinutes()),
           sec = this.zeroPad(dateObj.getSeconds()),
           date = [year, month, day].join('-'),
-          time = [hour, min, sec].join(':');
+          time = [hour, min, sec].join(':'),
+          dateValue = date + ' ' + time;
 
       if (this.schema.format == 'date') dateValue = date;
       else if (this.schema.format == 'time') dateValue = time;
-      else dateValue = date + ' ' + time;
 
       this.input.value = dateValue;
+      if (this.flatpickr) this.flatpickr.setDate(dateValue);
     }
   },
   destroy: function() {

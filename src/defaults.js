@@ -9,6 +9,10 @@ JSONEditor.defaults.options = {};
 
 JSONEditor.defaults.options.prompt_before_delete = true;
 
+JSONEditor.defaults.options.upload = function(type, file, cbs) {
+  console.log('Upload handler required for upload editor');
+};
+
 // String translate function
 JSONEditor.defaults.translate = function(key, variables) {
   var lang = JSONEditor.defaults.languages[JSONEditor.defaults.language];
@@ -228,6 +232,10 @@ JSONEditor.defaults.languages.en = {
     * Title on Save buttons
 	*/
   button_save: "Save",
+  /**
+    * Title on Copy buttons
+	*/
+  button_copy: "Copy",
   /**
     * Title on Cancel buttons
 	*/
