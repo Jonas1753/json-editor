@@ -292,6 +292,15 @@ JSONEditor.defaults.languages.en = {
     * Default title for array items
     */
   default_array_item_title: "item",
+
+  alert_invalid_json: "Invalid Json!",
+  button_add: "+",
+  button_cancel: "Cancel",
+  button_save: "Save",
+  button_copy: "Copy",
+  button_edit: "edit",
+  placeholder_new_property: "New Property...",
+  dialog_delete: "Do you want to delete this item?"
 };
 
 // Miscellaneous Plugin Settings
