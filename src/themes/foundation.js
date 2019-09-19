@@ -29,8 +29,8 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
         this.addInputError(input,text);
     }
   },
-  getFormInputLabel: function(text) {
-    var el = this._super(text);
+  getFormInputLabel: function(text, req) {
+    var el = this._super(text, req);
     el.style.display = 'inline-block';
     return el;
   },
@@ -42,7 +42,8 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
   },
   getFormInputDescription: function(text) {
     var el = document.createElement('p');
-    el.textContent = text;
+    if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
+    else el.textContent = this.cleanText(text);
     el.style.marginTop = '-10px';
     el.style.fontStyle = 'italic';
     return el;
@@ -125,7 +126,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
       var inputGroup = document.createElement('div');
       inputGroup.classList.add('input-group-button');
       inputGroup.style.verticalAlign = 'top';
-      buttons[i].classList.remove('small');   
+      buttons[i].classList.remove('small');
       inputGroup.appendChild(buttons[i]);
       inputGroupContainer.appendChild(inputGroup);
     }
@@ -141,8 +142,8 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     el.style.fontSize = '.6em';
     return el;
   },
-  getFormInputLabel: function(text) {
-    var el = this._super(text);
+  getFormInputLabel: function(text, req) {
+    var el = this._super(text, req);
     el.style.fontWeight = 'bold';
     return el;
   },
@@ -160,9 +161,12 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px; margin-left: 10px;" id="' + pName + '"></dl><div class="tabs-content twelve columns" style="padding: 10px; margin-left: 10px;" id="' + pName + '"></div>';
     return el;
   },
-  setGridColumnSize: function(el,size) {
+  setGridColumnSize: function(el,size, offset) {
     var sizes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
     el.classList.add('columns', sizes[size]);
+    if (offset && offset < 11) {
+      el.classList.add('offset-by-' + sizes[offset]);
+    }
   },
   getTab: function(text, tabId) {
     var el = document.createElement('dd');
@@ -233,16 +237,20 @@ JSONEditor.defaults.themes.foundation4 = JSONEditor.defaults.themes.foundation.e
     el.style.fontSize = '.6em';
     return el;
   },
-  setGridColumnSize: function(el,size) {
-    el.classList.add('columns', 'large-'+size);
+  setGridColumnSize: function(el, size, offset) {
+    el.classList.add('columns', 'large-' + size);
+    if (offset) {
+      el.classList.add('large-offset-' + offset);
+    }
+
   },
   getFormInputDescription: function(text) {
     var el = this._super(text);
     el.style.fontSize = '.8rem';
     return el;
   },
-  getFormInputLabel: function(text) {
-    var el = this._super(text);
+  getFormInputLabel: function(text, req) {
+    var el = this._super(text, req);
     el.style.fontWeight = 'bold';
     return el;
   }
@@ -255,8 +263,11 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
     el.style.fontSize = '.8rem';
     return el;
   },
-  setGridColumnSize: function(el,size) {
+  setGridColumnSize: function(el,size, offset) {
     el.classList.add('columns', 'medium-'+size);
+    if (offset) {
+      el.classList.add('medium-offset-'+offset);
+    }
   },
   getButton: function(text, icon, title) {
     var el = this._super(text,icon,title);
@@ -352,8 +363,8 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
     el.style.marginBottom = 0;
     return el;
   },
-  getFormInputLabel: function(text) {
-    var el = this._super(text);
+  getFormInputLabel: function(text, req) {
+    var el = this._super(text, req);
     el.style.display = 'block';
     return el;
   },

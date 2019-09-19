@@ -96,14 +96,16 @@ JSONEditor.AbstractTheme = Class.extend({
 
     return icon;
   },
-  getFormInputLabel: function(text) {
+  getFormInputLabel: function(text, req) {
     var el = document.createElement('label');
     el.appendChild(document.createTextNode(text));
+    if (req) el.classList.add('required');
     return el;
   },
-  getCheckboxLabel: function(text) {
+  getCheckboxLabel: function(text, req) {
     var el = this.getFormInputLabel(text);
     el.style.fontWeight = 'normal';
+    if (req) el.classList.add('required');  
     return el;
   },
   getHeader: function(text) {
@@ -235,7 +237,8 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getDescription: function(text) {
     var el = document.createElement('p');
-    el.innerHTML = text;
+    if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
+    else el.textContent = this.cleanText(text);
     return el;
   },
   getCheckboxDescription: function(text) {
@@ -450,5 +453,11 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getInputGroup: function(input, buttons) {
     return undefined;
+  },
+  cleanText: function(txt) {
+    // Clean out HTML tags from txt
+    var tmp = document.createElement('div');
+    tmp.innerHTML = txt;
+    return (tmp.textContent || tmp.innerText);
   }
 });

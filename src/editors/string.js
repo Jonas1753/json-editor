@@ -68,7 +68,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
   },
   build: function() {
     var self = this, i;
-    if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
+    if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
     if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
 
@@ -266,7 +266,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       var output = document.createElement('output');
       output.setAttribute('class', 'range-output');
       this.control.appendChild(output);
-      output.value = this.schema.default;
+      output.value = this.schema.default || Math.max(this.schema.minimum || 0, 0);
       this.input.addEventListener('change', function () {
         output.value = self.input.value;
       });

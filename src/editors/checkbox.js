@@ -1,8 +1,10 @@
 JSONEditor.defaults.editors.checkbox = JSONEditor.AbstractEditor.extend({
   setValue: function(value,initial) {
-    this.value = !!value;
+    value = !!value;
+    var changed = this.getValue() !== value;
+    this.value = value;
     this.input.checked = this.value;
-    this.onChange();
+    this.onChange(changed);
   },
   register: function() {
     this._super();
@@ -20,7 +22,7 @@ JSONEditor.defaults.editors.checkbox = JSONEditor.AbstractEditor.extend({
   build: function() {
     var self = this;
     if(!this.options.compact) {
-      this.label = this.header = this.theme.getCheckboxLabel(this.getTitle());
+      this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired());
     }
     if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);

@@ -5,6 +5,24 @@ JSONEditor.Validator = Class.extend({
     this.options = options || {};
     this.translate = this.jsoneditor.translate || JSONEditor.defaults.translate;
   },
+  fitTest: function(value) {
+    var matchedProperties = 0;
+    var extraProperties = 0;
+    if (typeof value === "object" && value !== null) {
+      // Work on a copy of the schema
+      var schema = $extend({},this.jsoneditor.expandRefs(this.schema));
+      for (var i in schema.properties) {
+        if (!schema.properties.hasOwnProperty(i)) {
+          extraProperties++;
+          continue;
+        }
+        if (typeof value[i] !== "undefined") {
+          matchedProperties++;
+        }
+      }
+    }
+    return {match: matchedProperties, extra: extraProperties};
+  },
   validate: function(value) {
     return this._validateSchema(this.schema, value);
   },
@@ -32,7 +50,7 @@ JSONEditor.Validator = Class.extend({
           message: this.translate("error_notset")
         });
       }
-      
+
       return errors;
     }
 
@@ -313,7 +331,7 @@ JSONEditor.Validator = Class.extend({
           errors.push({
             path: path,
             property: 'pattern',
-            message: this.translate('error_pattern', [schema.pattern])
+            message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
           });
         }
       }
@@ -534,22 +552,41 @@ JSONEditor.Validator = Class.extend({
       }
     }
 
+    if (schema.links) {
+      for (var m = 0; m < schema.links.length; m++) {
+        if (schema.links[m].rel && schema.links[m].rel.toLowerCase() === "describedby") {
+          var href = schema.links[m].href;
+          var data = this.jsoneditor.root.getValue();
+          //var template = new UriTemplate(href); //preprocessURI(href));
+          //var ref = template.fillFromObject(data);
+          var template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template);
+          var ref = template(data);
+
+          schema.links.splice(m, 1);
+
+          schema = $extend({}, schema, this.jsoneditor.refs[ref]);
+
+          errors = errors.concat(this._validateSchema(schema, value, path));
+        }
+      }
+    }
+
     // date, time and datetime-local validation
     if(['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
 
-      var validator = {
-          'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
-          'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
-          'datetime-local': /^(\d{4}\D\d{2}\D\d{2} \d{2}:\d{2}(?::\d{2})?)?$/
+      var validatorRx = {
+        'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
+        'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
+        'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
       };
       var format = {
-          'date': '"YYYY-MM-DD"',
-          'time': '"HH:MM"',
-          'datetime-local': '"YYYY-MM-DD HH:MM"'
+        'date': '"YYYY-MM-DD"',
+        'time': '"HH:MM"',
+        'datetime-local': '"YYYY-MM-DD HH:MM"'
       };
 
       var ed = this.jsoneditor.getEditor(path);
-      var dateFormat = ed.flatpickr ? ed.flatpickr.config.dateFormat : format[ed.format];
+      var dateFormat = (ed && ed.flatpickr) ? ed.flatpickr.config.dateFormat : format[schema.format];
 
       if (schema.type == 'integer') {
         // The value is a timestamp
@@ -566,21 +603,21 @@ JSONEditor.Validator = Class.extend({
           errors.push({
             path: path,
             property: 'format',
-            message: this.translate('error_' + ed.format.replace(/-/g, "_"), [dateFormat])
+            message: this.translate('error_' + schema.format.replace(/-/g, "_"), [dateFormat])
           });
         }
       }
-      else if (!ed.flatpickr) {
+      else if (!ed || !ed.flatpickr) {
         // Standard string input, without flatpickr
-        if(!validator[ed.format].test(value)) {
+        if(!validatorRx[schema.format].test(value)) {
           errors.push({
             path: path,
             property: 'format',
-            message: this.translate('error_' + ed.format.replace(/-/g, "_"), [format[ed.format]])
+            message: this.translate('error_' + schema.format.replace(/-/g, "_"), [dateFormat])
           });
         }
       }
-      else {
+      else if (ed) {
         // Flatpickr validation
         if (value !== '') {
 
@@ -612,6 +649,10 @@ JSONEditor.Validator = Class.extend({
         }
       }
     }
+
+    // Internal validators using the custom validator format
+    errors = errors.concat(ipValidator.validate.call(self,schema,value,path));
+
     // Custom type validation (global)
     $each(JSONEditor.defaults.custom_validators,function(i,validator) {
       errors = errors.concat(validator.call(self,schema,value,path));

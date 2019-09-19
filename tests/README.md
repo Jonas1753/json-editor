@@ -11,7 +11,8 @@ docker-compose up -d
 ```
 
 - Webserver URL: http://127.0.0.1:9001/
-- Browser URL: vnc://127.0.0.1:9059/
+- Selenium Firefox Browser URL: vnc://127.0.0.1:9059/
+- Selenium Chrome Browser URL: vnc://127.0.0.1:9060/
 
 ```
 docker-compose run --rm codeceptjs bash
@@ -20,6 +21,7 @@ $ npm run build
 $ codeceptjs run
 ```
 
+Tests whose `Scenario` string contains the tag `@optional` will be ignored by the automated build process.
 
 ### References
 

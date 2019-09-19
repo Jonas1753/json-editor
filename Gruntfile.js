@@ -39,6 +39,7 @@ module.exports = function(grunt) {
           'src/core.js',
 
           // JSON Schema validator
+          'src/validators/*.js',
           'src/validator.js',
 
           // All the editors
@@ -54,16 +55,22 @@ module.exports = function(grunt) {
           'src/editors/table.js',
           'src/editors/multiple.js',
           'src/editors/enum.js',
+          'src/editors/choices.js',
           'src/editors/select.js',
           'src/editors/selectize.js',
           'src/editors/multiselect.js',
           'src/editors/base64.js',
           'src/editors/upload.js',
           'src/editors/checkbox.js',
+          'src/editors/array/choices.js',
           'src/editors/array/selectize.js',
           'src/editors/starrating.js',
           'src/editors/datetime.js',
           'src/editors/signature.js',
+          'src/editors/radio.js',
+          'src/editors/describedby.js',
+          'src/editors/uuid.js',
+          'src/editors/ip.js',  
 
           // All the themes and iconlibs
           'src/theme.js',
@@ -139,6 +146,7 @@ module.exports = function(grunt) {
         'src/core.js',
 
         // JSON Schema validator
+        'src/validators/*.js',
         'src/validator.js',
 
         // All the editors

@@ -45,7 +45,8 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     var el = document.createElement('span');
     el.style.fontSize = '.8em';
     el.style.fontStyle = 'italic';
-    el.textContent = text;
+    if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
+    else el.textContent = this.cleanText(text);
     return el;
   },
   getButtonHolder: function() {
@@ -54,11 +55,12 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     el.style.fontSize = '.7em';
     return el;
   },
-  getFormInputLabel: function(text) {
+  getFormInputLabel: function(text, req) {
     var el = document.createElement('label');
     el.style.fontWeight = 'bold';
     el.style.display = 'block';
     el.textContent = text;
+    if (req) el.classList.add('required');    
     return el;
   },
   getButton: function(text, icon, title) {
