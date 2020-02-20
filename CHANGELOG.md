@@ -1,5 +1,35 @@
-### Current
+### Current 2.0.0-dev
+  - Fix of #643 - Allow use of themes not compiled directly into the build
+  - Removed Themes and IconSets that have not been updated to 2.0 format.
+  - Fix of #618 - links are placed AFTER the description. Now places the link BEFORE description (if available) or at bottom of container
+  - Changes to Vallilla Colorpicker editor.
+   * Added support for 'setValue'
+   * Added better enable/disable methods.
+   * Removed "onChange" function from list of required options so it can be overidden using schema options.
+   * Changed the update method (Otherwise buttons have no meaning). Now updating is done in "onDone" function, except if inline element. Then updating is done using "onChange" function.
+  - Fix of #629 - BS4 theme bug where basic tab was placed outside tabs container.
+  - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
+  - Added support for recursive callback options.
 
+### 2.0.0-alpha-1
+
+  - Added remove_button_labels option.
+  - Added Spectre Theme styling for `anyOf`, `oneOf` and `allOf` selectbox.
+  - Added filter to remove duplicate error messages. Duplicate error messages are now displayed as single error message with error count. (Duplicate error messages can occur when using `not`, `anyOf`, `oneOf` and `allOf` due to these are **conditions**, not properties.)
+  - Added new 2.x Theme "Spectre".
+  - Updated Theme "Tailwind" to 2.x format.
+  - Added sort option for dynamic enumSource.
+  - Added JavaScript callback templating support for enumSource: filter, title and value properties.
+  - Fix of #470 - Constant enumSource value specified as array of strings causes a template compilation error.
+  - Fix of #467 - child watches parent = infinite recursion.
+  - Select and Multiselect now uses requestAnimationFrame when applying special editor code to select field in order to prevent delays.
+  - Added missing validation messages and support for options infoText an compact in Multiselect editor.    
+  - Refactored src/editors/multiselect.js and moved hardcoded support for Select2 into seperate editor files which then extends src/editors/multiselect.js
+  - Refactored src/editors/select.js and moved hardcoded support for special editors (Select2 and Selecttize) into seperate editor files which then extends src/editors/select.js
+  - Added new WYSIWYG editor [Jodit](https://xdsoft.net/jodit/) as a replacement for SCEditor.
+  - Jodit, Ace Editor, SimpleMDE and SCEditor can now be configured using global config options which can be overridden for single properties using schema options.
+  - Refactored src/editors/string.js and moved hardcoded support for special editors (Ace Editor, SimpleMDE and SCEditor) into seperate editor files which then extends src/editors/string.js.
+  - Fixed #408 - Now upload editor should be working again.
   - Added Array events for table format, tests
   - Fixed #408 - Now upload editor should be working again. 
   - Added [Choices.js](https://github.com/jshjohnson/Choices) support for array and select editors.
